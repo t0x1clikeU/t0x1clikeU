@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>時計</title>
+  <style>
+    body {
+      background: radial-gradient(circle, #1a1a2e, #16213e);
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .clock-container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      width: 60%;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    .clock {
+      font-size: 50px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .city-selector {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      width: 70%;
+      max-width: 600px;
+      height: 200px;
+      overflow-y: auto;
+      text-align: left;
+      scrollbar-width: thin;
+      scrollbar-color: #00eaff #1a1a2e;
+    }
+
+    /* 🎨 スクロールバーのデザイン（Chrome, Edge, Safari対応） */
+    .city-selector::-webkit-scrollbar {
+      width: 8px; /* スクロールバーの幅 */
+    }
+
+    .city-selector::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #00eaff, #0077ff); /* スクロールバーのつまみ */
+      border-radius: 10px;
+    }
+
+    .city-selector::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1); /* スクロールバーの背景 */
+      border-radius: 10px;
+    }
+
+    .city {
+      padding: 10px;
+      border-bottom: 1px solid #555;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .city:hover {
+      background: rgba(0, 238, 255, 0.3);
+      transform: scale(1.02);
+    }
+
+    .selected-city {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .clock-container, .city-selector {
+      animation: fadeIn 1s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="clock-container">
+    <h1>現在の時刻</h1>
+    <div class="selected-city" id="selected-city">東京 🇯🇵</div>
+    <div class="clock" id="current-time">--:--:--</div>
+  </div>
+
+  <h2>都市を選択</h2>
+  <div class="city-selector" id="city-list">
+    <!-- 都市リスト（JavaScriptで追加） -->
+  </div>
+
+  <script>
+    // 🌍 世界の主要都市とUTCオフセット
+    const cities = [
+      { name: "東京 🇯🇵", offset: 9 },
+      { name: "ニューヨーク 🇺🇸", offset: -5 },
+      { name: "ロンドン 🇬🇧", offset: 0 },
+      { name: "パリ 🇫🇷", offset: 1 },
+      { name: "ベルリン 🇩🇪", offset: 1 },
+      { name: "シドニー 🇦🇺", offset: 11 },
+      { name: "北京 🇨🇳", offset: 8 },
+      { name: "シンガポール 🇸🇬", offset: 8 },
+      { name: "ドバイ 🇦🇪", offset: 4 },
+      { name: "ロサンゼルス 🇺🇸", offset: -8 },
+      { name: "モスクワ 🇷🇺", offset: 3 },
+      { name: "ソウル 🇰🇷", offset: 9 },
+      { name: "ヨハネスブルグ 🇿🇦", offset: 2 }
+    ];
+
+    let selectedOffset = 9; // 🌟 初期設定: 東京 (UTC+9)
+
+    // 🌍 都市リストを生成
+    const cityListElement = document.getElementById("city-list");
+    cities.forEach(city => {
+      const cityElement = document.createElement("div");
+      cityElement.classList.add("city");
+      cityElement.textContent = city.name;
+      cityElement.onclick = () => selectCity(city.name, city.offset);
+      cityListElement.appendChild(cityElement);
+    });
+
+    // ⏰ 都市を選択したときの処理
+    function selectCity(cityName, offset) {
+      document.getElementById("selected-city").textContent = cityName;
+      selectedOffset = offset;
+      updateTime();
+    }
+
+    // ⏳ 時刻を更新する関数
+    function updateTime() {
+      const now = new Date();
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      const localTime = new Date(utc + (3600000 * selectedOffset));
+
+      const hours = String(localTime.getHours()).padStart(2, '0');
+      const minutes = String(localTime.getMinutes()).padStart(2, '0');
+      const seconds = String(localTime.getSeconds()).padStart(2, '0');
+
+      document.getElementById("current-time").textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    // ⏳ 1秒ごとに時刻を更新
+    setInterval(updateTime, 1000);
+    
+    // 🌟 初期状態で東京の時刻を表示
+    updateTime();
+  </script>
+
+</body>
+</html>

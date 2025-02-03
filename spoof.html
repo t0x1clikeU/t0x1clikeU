@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>偽造情報生成</title>
+  <style>
+    body {
+      background: radial-gradient(circle, #1a1a2e, #16213e);
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      width: 60%;
+      max-width: 600px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #00eaff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      color: white;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #00d8e0;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #result span {
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      animation: fadeIn 1s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>偽装名と年齢を入力してください！</h1>
+    <h1>それに対応した情報が表示されます。</h1>
+    <input type="text" id="name" placeholder="名前を入力してください">
+    <input type="number" id="age" placeholder="年齢を入力してください">
+    <button onclick="calculateInfo()">情報を表示</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateInfo() {
+      const name = document.getElementById("name").value;
+      const age = document.getElementById("age").value;
+
+      if (name.trim() === "" || age.trim() === "") {
+        alert("名前と年齢を入力してください！");
+        return;
+      }
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1; 
+      const currentDay = currentDate.getDate();
+
+      const birthYear = currentYear - age;
+
+      const era = getEra(birthYear);
+
+      const zodiac = getZodiac(birthYear);
+
+      const eraYear = birthYear - getEraStartYear(era) + 1;
+
+      resultDiv.innerHTML = `
+        <p>こんにちは、${name}さん。</p>
+        <p>あなたは西暦${birthYear}年生まれで、現在${age}歳です。</p>
+        <p>元号は${era} ${eraYear}年生まれです。</p>
+        <p>干支は${zodiac}です。</p>
+      `;
+    }
+
+    function getEra(birthYear) {
+      if (birthYear >= 2019) {
+        return "令和";
+      } else if (birthYear >= 1989) {
+        return "平成";
+      } else if (birthYear >= 1926) {
+        return "昭和";
+      } else if (birthYear >= 1912) {
+        return "大正";
+      } else if (birthYear >= 1868) {
+        return "明治";
+      } else {
+        return "不明";
+      }
+    }
+
+    function getEraStartYear(era) {
+      switch(era) {
+        case "令和": return 2019;
+        case "平成": return 1989;
+        case "昭和": return 1926;
+        case "大正": return 1912;
+        case "明治": return 1868;
+        default: return 0;
+      }
+    }
+
+    function getZodiac(birthYear) {
+      const zodiacSigns = [
+        "子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"
+      ];
+      const yearMod = (birthYear - 4) % 12;
+      return zodiacSigns[yearMod];
+    }
+  </script>
+
+</body>
+</html>

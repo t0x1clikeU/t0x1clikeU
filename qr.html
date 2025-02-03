@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRコード生成</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      background: radial-gradient(circle, #1a1a2e, #16213e);
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      width: 60%;
+      max-width: 500px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #00eaff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      color: white;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #00d8e0;
+    }
+
+    #qrcode {
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      animation: fadeIn 1s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>QRコード生成</h1>
+    <input type="text" id="text-input" placeholder="QRコードにしたい文字を入力">
+    <button onclick="generateQR()">生成</button>
+    <div id="qrcode"></div>
+  </div>
+
+  <script>
+    function generateQR() {
+      const text = document.getElementById("text-input").value;
+      const qrContainer = document.getElementById("qrcode");
+      qrContainer.innerHTML = ""; // QRコードをクリア
+      if (text.trim() !== "") {
+        new QRCode(qrContainer, {
+          text: text,
+          width: 200,
+          height: 200
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
