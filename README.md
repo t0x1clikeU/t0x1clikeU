@@ -1,7 +1,7 @@
 
 # T0x1cLikeU
 
-- 💡 develop tool
+- 💡 Develop tool
 - 🛠️ Android Cheat
 
 [![My Skills](https://skillicons.dev/icons?i=python,lua,html&theme=dark)](https://skillicons.dev)
